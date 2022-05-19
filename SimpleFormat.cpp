@@ -5,8 +5,8 @@
 namespace format::internal
 {
     StringArgs::StringArgs(std::vector<std::string> args, std::size_t totalByteSize) :
-    _args(std::move(args)),
-    _totalByteSize(totalByteSize)
+        _args(std::move(args)),
+        _totalByteSize(totalByteSize)
     {
     }
 
