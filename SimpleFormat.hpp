@@ -52,7 +52,7 @@ namespace format
         {
             public:
                 Pattern(std::string pattern);
-                std::string getPattern() const;
+                const std::string& getPattern() const;
                 const std::vector<std::size_t>& getPlaceholders() const;
 
             private:
