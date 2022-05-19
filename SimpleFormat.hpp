@@ -43,5 +43,21 @@ namespace format
 
             return {std::move(result), totalByteSize};
         }
+
+        /************************************************************************/
+        /*                                Pattern                               */
+        /************************************************************************/
+
+        class Pattern
+        {
+            public:
+                Pattern(std::string pattern);
+                std::string getPattern() const;
+                const std::vector<std::size_t>& getPlaceholders() const;
+
+            private:
+                std::string _pattern;
+                std::vector<std::size_t> _placeholders;
+        };
     }
 }
