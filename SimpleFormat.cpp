@@ -42,10 +42,9 @@ namespace format::internal
         return _placeholders;
     }
 
-    // [startFrom, endFrom] => [startTo, startTo + (endFrom - startFrom)]
     void overwrite_range(std::string& to, const std::string& from, std::size_t startTo, std::size_t startFrom, std::size_t endFrom)
     {
-        for(auto i = startFrom; i <= endFrom; ++i)
+        for(auto i = startFrom; i < endFrom; ++i)
             to[startTo + i - startFrom] = from[i];
     }
 
@@ -58,19 +57,23 @@ namespace format::internal
 
         //Compute the total size of the string
         auto final_size = raw_pattern.size() - pattern.getPlaceholders().size() + args.getTotalByteSize();
-        std::string result {};
-        result.reserve(final_size);
+        std::string result (final_size, '?'); //old way to initialize a string; bad >:(
 
         std::size_t globalOffset = 0;
         std::size_t lastNonReplacedIndex = 0;
 
-        for(auto i = 0; i < raw_pattern.size(); ++i)
+        for(auto i = 0; i < pattern.getPlaceholders().size(); ++i)
         {
             const std::string& currentString = args.toVector()[i];
-            const std::size_t currentPlaceholder = pattern.getPlaceholders()[i];
+            const std::size_t currentPlaceholder = pattern.getPlaceholders()[i] + globalOffset - i;
 
             //Filling the non-replaced part
-            overwrite_range(result, pattern.getPattern(), lastNonReplacedIndex, )
+            overwrite_range(result, raw_pattern, lastNonReplacedIndex, lastNonReplacedIndex - globalOffset + i, currentPlaceholder - globalOffset + i);
+            lastNonReplacedIndex = currentPlaceholder + currentString.size();
+
+            //Filling the replaced part
+            overwrite_range(result, currentString, currentPlaceholder, 0, currentString.size());
+            globalOffset += currentString.size();
         }
 
         return result;
