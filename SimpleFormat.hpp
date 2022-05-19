@@ -59,5 +59,10 @@ namespace format
                 std::string _pattern;
                 std::vector<std::size_t> _placeholders;
         };
+
+        // [startTo, endTo] => [startFrom, startFrom + (endTo - startTo)]
+        void overwrite_range(std::string& to, const std::string& from, std::size_t startTo, std::size_t startFrom, std::size_t endFrom);
+
+        std::string fill_pattern(const Pattern& pattern, const StringArgs& args);
     }
 }
