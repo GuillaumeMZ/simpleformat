@@ -50,9 +50,6 @@ namespace format::internal
 
     std::string fill_pattern(const Pattern& pattern, const StringArgs& args)
     {
-        if(args.toVector().size() != pattern.getPlaceholders().size())
-            throw std::runtime_error("The number of arguments does not match the number of placeholders");
-
         const auto& raw_pattern = pattern.getPattern();
 
         //Compute the total size of the string
@@ -67,11 +64,11 @@ namespace format::internal
             const std::string& currentString = args.toVector()[i];
             const std::size_t currentPlaceholder = pattern.getPlaceholders()[i] + globalOffset - i;
 
-            //Filling the non-replaced part
+            //Filling the non-placeholder part
             overwrite_range(result, raw_pattern, lastNonReplacedIndex, lastNonReplacedIndex - globalOffset + i, currentPlaceholder - globalOffset + i);
             lastNonReplacedIndex = currentPlaceholder + currentString.size();
 
-            //Filling the replaced part
+            //Filling the placeholder part
             overwrite_range(result, currentString, currentPlaceholder, 0, currentString.size());
             globalOffset += currentString.size();
         }
