@@ -94,7 +94,7 @@ namespace format
             for(auto i = 0, j = 0; i < _pattern.size(); ++i)
             {
                 if(j >= N)
-                    throw std::runtime_error("Too many placeholders");
+                    throw std::runtime_error("The number of arguments does not match the number of placeholders");
 
                 if(_pattern[i] == '$')
                 {
@@ -157,10 +157,6 @@ namespace format
             return source;
 
         internal::Pattern<N> pattern{std::move(source)};
-
-        if(pattern.getPlaceholders().size() != N) //TODO: à retirer car ceci sera fait dans le pattern
-            throw std::runtime_error("The number of arguments does not match the number of placeholders");
-
         const auto& stringArgs = internal::make_stringargs<N>(args...);
 
         return internal::fill_pattern(pattern, stringArgs);
